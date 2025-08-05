@@ -1,0 +1,42 @@
+import { getUser } from "@/services/auth";
+import { User } from "@/type";
+import { create } from "zustand";
+type AuthState = {
+  isAuthenticated: boolean;
+  user: User | null;
+  isLoading: boolean;
+
+  setIsAuthenticated: (state: boolean) => void;
+  setUser: (user: User | null) => void;
+  setLoading: (state: boolean) => void;
+
+  fetchAuthenticatedUser: () => Promise<void>;
+};
+const useAuthStore = create<AuthState>((set) => ({
+  isAuthenticated: false,
+  user: null,
+  isLoading: true,
+
+  setIsAuthenticated: (state) => set({ isAuthenticated: state }),
+  setUser: (user) => set({ user }),
+  setLoading: (isLoading) => set({ isLoading }),
+
+  fetchAuthenticatedUser: async () => {
+    set({ isLoading: true });
+    try {
+      const user = await getUser();
+      
+      if(user) {
+          set({ isAuthenticated: true, user });
+      } else {
+         set({ isAuthenticated: false, user: null });
+      }
+    } catch (error) {
+      set({ isAuthenticated: false });
+    } finally {
+      set({ isLoading: false });
+    }
+  },
+}));
+
+export default useAuthStore;

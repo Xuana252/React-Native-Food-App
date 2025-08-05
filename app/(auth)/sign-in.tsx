@@ -1,7 +1,9 @@
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
-import { signIn } from "@/services/api";
-import { Link } from "expo-router";
+import { signIn } from "@/services/auth";
+
+import * as Sentry from "@sentry/react-native";
+import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import { Alert, Text, View } from "react-native";
 
@@ -17,8 +19,10 @@ const SignIn = () => {
 
     try {
       await signIn({ email, password });
+      router.replace("/")
     } catch (error: any) {
       Alert.alert("Error", error.message);
+      Sentry.captureEvent(error)
     } finally {
       setLoading(false);
     }

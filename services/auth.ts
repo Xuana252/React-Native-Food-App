@@ -1,5 +1,5 @@
 import { account, appwriteConfig, avatars, databases } from "@/lib/appwrite";
-import { CreateUserPrams, SignInParams } from "@/type";
+import { CreateUserPrams, SignInParams, User } from "@/type";
 import { ID, Query } from "react-native-appwrite";
 
 export async function signUp({ name, email, password }: CreateUserPrams) {
@@ -24,6 +24,7 @@ export async function signUp({ name, email, password }: CreateUserPrams) {
 }
 
 export async function signIn({ email, password }: SignInParams) {
+  // await account.deleteSession("current");
   const session = await account.createEmailPasswordSession(email, password);
 }
 
@@ -39,5 +40,9 @@ export async function getUser() {
 
   if (!currentUser) throw Error;
 
-  return currentUser.documents[0];
+  return currentUser.documents[0] as unknown as User;
+}
+
+export async function signOut() {
+  await account.deleteSession("current");
 }
