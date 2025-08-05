@@ -1,5 +1,6 @@
 import { images } from "@/constants";
 import useAuthStore from "@/store/auth.store";
+import { useCartStore } from "@/store/cart.store";
 import { TabBarIconProps } from "@/type";
 import cn from "clsx";
 import { BlurView } from "expo-blur";
@@ -11,7 +12,7 @@ const TabBarIcon = ({ focused, icon, title }: TabBarIconProps) => (
   <View className={"tab-icon"}>
     <Image
       source={icon}
-      className="size-5  overflow-visible"
+      className="size-7  overflow-visible"
       resizeMode="contain"
       tintColor={focused ? "#FE8C00" : "#5D5F6D"}
     />
@@ -28,7 +29,8 @@ const TabBarIcon = ({ focused, icon, title }: TabBarIconProps) => (
 
 const TabLayout = () => {
   const { isAuthenticated } = useAuthStore();
-
+  const { getTotalItems } = useCartStore();
+  const totalItems = getTotalItems();
   if (!isAuthenticated) return <Redirect href={"/sign-in"} />;
 
   return (
@@ -83,6 +85,16 @@ const TabLayout = () => {
           tabBarIcon: ({ focused }) => (
             <TabBarIcon title="Cart" icon={images.bag} focused={focused} />
           ),
+          tabBarBadge: totalItems > 0 ? totalItems : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: "#FE8C00",
+            color: "white",
+            fontSize: 10,
+            maxHeight: 16,
+            maxWidth: 16,
+            aspectRatio:1/1,
+            transform: "translateY(10px), translateX(5px)",
+          },
         }}
       />
       <Tabs.Screen

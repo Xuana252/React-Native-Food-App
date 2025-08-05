@@ -1,5 +1,5 @@
 import { appwriteConfig, databases } from "@/lib/appwrite";
-import { GetMenuParams, MenuItem } from "@/type";
+import { Category, GetMenuParams, MenuItem } from "@/type";
 import { Query } from "react-native-appwrite";
 
 export async function getMenu({ category, query, limit }: GetMenuParams) {
@@ -19,8 +19,9 @@ export async function getMenu({ category, query, limit }: GetMenuParams) {
 }
 
 export async function getCategories() {
-  return await databases.listDocuments(
+  const categories =  await databases.listDocuments(
     appwriteConfig.databaseId,
     appwriteConfig.categoriesCollectionId
-  );
+  )
+  return categories.documents as unknown as Category[];
 }

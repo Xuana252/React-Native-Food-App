@@ -1,5 +1,5 @@
 import { Account, Avatars, Client, Databases, Storage } from "react-native-appwrite";
-const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_IT!;
+const PROJECT_ID = process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID!;
 const ENDPOINT = process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT!;
 const PLATFORM = process.env.EXPO_PUBLIC_APPWRITE_PLATFORM!;
 

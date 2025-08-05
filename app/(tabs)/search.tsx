@@ -1,14 +1,24 @@
 import CartButton from "@/components/CartButton";
+import CategoryFilter from "@/components/CategoryFilter";
 import MenuCard from "@/components/MenuCard";
+import Searchbar from "@/components/SearchBar";
+import { images } from "@/constants";
 import useAppwrite from "@/lib/useFetch";
 import { getCategories, getMenu } from "@/services/food";
 import { MenuItem } from "@/type";
 import cn from "clsx";
 import { useLocalSearchParams } from "expo-router";
 import React, { useEffect } from "react";
-import { FlatList, SafeAreaView, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  SafeAreaView,
+  Text,
+  View,
+} from "react-native";
 const Search = () => {
-  const LIMIT = 1;
+  const LIMIT = 12;
   const { query, category } = useLocalSearchParams<{
     query: string;
     category: string;
@@ -35,7 +45,7 @@ const Search = () => {
     refetch({ category, query, limit: LIMIT });
   }, [category, query]);
   return (
-    <SafeAreaView>
+    <SafeAreaView className="bg-white flex-1">
       <FlatList
         data={menus}
         renderItem={({ item, index }) => {
@@ -48,7 +58,7 @@ const Search = () => {
                 !isFirstRightColItem ? "mt-10" : "mt-0"
               )}
             >
-              <MenuCard item={item as MenuItem}/>
+              <MenuCard item={item as MenuItem} />
             </View>
           );
         }}
@@ -73,13 +83,29 @@ const Search = () => {
               <CartButton />
             </View>
 
-            {/* <SearchBar />
+            <Searchbar />
 
-                        <Filter categories={categories!} /> */}
+            <CategoryFilter categories={categories!} />
           </View>
         )}
         ListEmptyComponent={() =>
-          !loading && <Text className="text-center">No Results</Text>
+          loading ? (
+            <ActivityIndicator size="large" className="text-primary" />
+          ) : (
+            <View className="w-full flex-col items-center gap-2">
+              <Image
+                source={images.emptyState}
+                className="size-40"
+                resizeMode="contain"
+              />
+              <Text className="base-bold">
+                Nothing matched your search
+              </Text>
+              <Text className="body-regular">
+                Try a different search term or check for typos.
+              </Text>
+            </View>
+          )
         }
       />
     </SafeAreaView>
