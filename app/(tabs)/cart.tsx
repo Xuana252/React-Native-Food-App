@@ -40,8 +40,10 @@ const Cart = () => {
     <SafeAreaView className="flex-1">
       <FlatList
         data={items}
-        renderItem={({ item }) => <CartItem item={item}/>}
-        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <CartItem item={item} />}
+        keyExtractor={(item) =>
+          [item.id, ...(item.customizations?.map((c) => c.id) || [])].join("-")
+        }
         ListHeaderComponent={() => (
           <View className="custom-header">
             <TouchableOpacity onPress={() => router.back()}>
@@ -71,7 +73,10 @@ const Cart = () => {
             />
             <Text className="base-bold">There is nothing in your cart</Text>
             <Text className="body-regular">
-              Go and grab something to <Link href={'/search'} className="font-bold text-primary">eat</Link>
+              Go and grab something to{" "}
+              <Link href={"/search"} className="font-bold text-primary">
+                eat
+              </Link>
             </Text>
           </View>
         )}

@@ -30,7 +30,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
                 items: get().items.map((i) =>
                     i.id === item.id &&
                     areCustomizationsEqual(i.customizations ?? [], customizations)
-                        ? { ...i, quantity: i.quantity + 1 }
+                        ? { ...i, quantity: i.quantity + item.quantity }
                         : i
                 ),
             });
@@ -87,7 +87,7 @@ export const useCartStore = create<CartStore>((set, get) => ({
             const base = item.price;
             const customPrice =
                 item.customizations?.reduce(
-                    (s: number, c: CartCustomization) => s + c.price,
+                    (s: number, c: CartCustomization) => s + c.price/10,
                     0
                 ) ?? 0;
             return total + item.quantity * (base + customPrice);

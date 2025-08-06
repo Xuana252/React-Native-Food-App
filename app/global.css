@@ -30,7 +30,7 @@
     }
 
     .cart-item__image {
-        @apply size-24 bg-primary/10 rounded-lg flex items-center justify-center;
+        @apply size-24  rounded-lg flex items-center justify-center;
     }
 
     .cart-item__actions {
