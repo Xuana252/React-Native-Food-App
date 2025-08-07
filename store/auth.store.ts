@@ -1,4 +1,4 @@
-import { getUser } from "@/services/auth";
+import { getUser, signOut } from "@/services/auth";
 import { User } from "@/type";
 import { create } from "zustand";
 type AuthState = {
@@ -11,6 +11,7 @@ type AuthState = {
   setLoading: (state: boolean) => void;
 
   fetchAuthenticatedUser: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
@@ -21,15 +22,25 @@ const useAuthStore = create<AuthState>((set) => ({
   setUser: (user) => set({ user }),
   setLoading: (isLoading) => set({ isLoading }),
 
+  logout: async () => {
+    try {
+      
+      set({ user: null, isAuthenticated: false });
+      await signOut();
+    } catch (error) {
+      console.log(error)
+    }
+  },
+
   fetchAuthenticatedUser: async () => {
     set({ isLoading: true });
     try {
       const user = await getUser();
-      
-      if(user) {
-          set({ isAuthenticated: true, user });
+
+      if (user) {
+        set({ isAuthenticated: true, user });
       } else {
-         set({ isAuthenticated: false, user: null });
+        set({ isAuthenticated: false, user: null });
       }
     } catch (error) {
       set({ isAuthenticated: false });

@@ -17,7 +17,7 @@ const CartItem = ({ item }: { item: CartItemType }) => {
           />
         </View>
 
-        <View>
+        <View className="overflow-hidden flex-1">
           <Text className="base-bold text-dark-100">{item.name}</Text>
           <FlatList
             data={item?.customizations}
@@ -27,7 +27,7 @@ const CartItem = ({ item }: { item: CartItemType }) => {
                 <Text className="text-primary">${item.price / 10}</Text>
               </Text>
             )}
-            contentContainerClassName="gap-4"
+            contentContainerClassName="gap-4 "
             keyExtractor={(item) => item.id}
             horizontal
           />
@@ -65,16 +65,20 @@ const CartItem = ({ item }: { item: CartItemType }) => {
                 tintColor={"#FF9C01"}
               />
             </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => removeItem(item.id, item.customizations!)}
+              className="flex-center ml-auto"
+            >
+              <Image
+                source={images.trash}
+                className="size-5"
+                resizeMode="contain"
+              />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-
-      <TouchableOpacity
-        onPress={() => removeItem(item.id, item.customizations!)}
-        className="flex-center"
-      >
-        <Image source={images.trash} className="size-5" resizeMode="contain" />
-      </TouchableOpacity>
     </View>
   );
 };

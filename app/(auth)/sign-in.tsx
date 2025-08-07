@@ -1,13 +1,17 @@
 import CustomButton from "@/components/CustomButton";
 import CustomInput from "@/components/CustomInput";
 import { signIn } from "@/services/auth";
+import useAuthStore from "@/store/auth.store";
 
 import * as Sentry from "@sentry/react-native";
-import { Link, router } from "expo-router";
-import React, { useState } from "react";
+import { Link } from "expo-router";
+import React, { useContext, useState } from "react";
 import { Alert, Text, View } from "react-native";
+import { modalContext } from "./_layout";
 
 const SignIn = () => {
+  const { setOpen } = useContext(modalContext);
+  const { fetchAuthenticatedUser } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
 
@@ -19,10 +23,10 @@ const SignIn = () => {
 
     try {
       await signIn({ email, password });
-      router.replace("/")
+      setOpen(true);
     } catch (error: any) {
       Alert.alert("Error", error.message);
-      Sentry.captureEvent(error)
+      Sentry.captureEvent(error);
     } finally {
       setLoading(false);
     }

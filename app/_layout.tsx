@@ -1,9 +1,11 @@
 import useAuthStore from "@/store/auth.store";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import * as Sentry from "@sentry/react-native";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, SafeAreaView } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import "./global.css";
 
 Sentry.init({
@@ -50,5 +52,12 @@ export default Sentry.wrap(function RootLayout() {
         <ActivityIndicator size="large" className="text-primary" />
       </SafeAreaView>
     );
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
+  );
 });
